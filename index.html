@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Коллекция литературных произведений</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Georgia', serif;
+            {% comment %} font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; {% endcomment %}
+            transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease, transform 0.3s ease;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            color: #495057;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            border: 1px solid #e0e0e0;
+        }
+        
+        header {
+            background: linear-gradient(to right, #6c5ce7, #a29bfe);
+            color: white;
+            padding: 30px 40px;
+            text-align: center;
+            position: relative;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #ffffff;
+            font-weight: 700;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+        }
+        
+        .nav-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 20px;
+        }
+        
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 12px 24px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .nav-btn.active {
+            background: rgba(255, 255, 255, 0.9);
+            color: #6c5ce7;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .literary-work {
+            display: none;
+        }
+        
+        .literary-work.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .section {
+            margin-bottom: 35px;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+            border-left: 4px solid;
+        }
+        
+        .work-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 25px;
+            border-bottom: 2px solid #e9ecef;
+        }
+        
+        .work-title {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .work-author {
+            font-style: italic;
+            font-size: 1.4rem;
+            color: #6c757d;
+        }
+        
+        .quote {
+            font-style: italic;
+            padding: 25px;
+            background: #f1f3f5;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 4px solid;
+            font-size: 1.2rem;
+            line-height: 1.8;
+            text-align: center;
+            position: relative;
+        }
+        
+        .quote::before {
+            content: """;
+            font-size: 4rem;
+            position: absolute;
+            left: 15px;
+            top: 0;
+            opacity: 0.1;
+            line-height: 1;
+        }
+        
+        .themes {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 20px 0;
+        }
+        
+        .theme {
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 0.95rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            font-weight: 500;
+        }
+        
+        .cover-container {
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .book-cover {
+            width: 100%;
+            max-width: 280px;
+            display: block;
+            margin: 25px auto;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            border: 1px solid #e9ecef;
+        }
+        
+        .book-cover:hover {
+            transform: scale(1.03) rotate(2deg);
+        }
+        
+        .decorative-element {
+            width: 100%;
+            height: 3px;
+            margin: 30px 0;
+            border-radius: 3px;
+        }
+
+        .comparison {
+            background: #f9f0ffff;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 25px;
+            background: #f8f9fa;
+            color: #6c757d;
+            font-size: 1rem;
+            border-top: 1px solid #e9ecef;
+        }
+        
+        .section-title {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            border-bottom: 2px solid;
+            padding-bottom: 8px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .section-title i {
+            font-size: 1.2rem;
+        }
+        
+        .character-list {
+            list-style-type: none;
+            margin: 15px 0;
+        }
+        
+        .character-list li {
+            padding: 8px 0;
+            border-bottom: 1px dashed #4caf50;
+        }
+        /* Цветовые схемы для произведений */
+        
+        /* Мастер и Маргарита - мистические пурпурные тона */
+        #master .section { border-left-color: #9c27b0; }
+        #master .quote { border-left-color: #9c27b0; background: #f3e5f5; }
+        #master .theme { background: #e1bee7; color: #4a148c; border: 1px solid #ba68c8; }
+        #master .decorative-element { background: linear-gradient(to right, #e1bee7, #ba68c8, #9c27b0); }
+        #master .section-title { color: #7b1fa2; border-color: #ba68c8; }
+        #master .work-title { color: #7b1fa2; }
+        #master-btn.active { background: #7b1fa2; color: white; border-color: #7b1fa2; }
+        
+        
+        /* Над пропастью во ржи - теплые оранжевые тона */
+        #catcher .section { border-left-color: #ff9800; }
+        #catcher .quote { border-left-color: #ff9800; background: #fff3e0; }
+        #catcher .theme { background: #ffe0b2; color: #e65100; border: 1px solid #ffb74d; }
+        #catcher .decorative-element { background: linear-gradient(to right, #ffe0b2, #ffb74d, #ff9800); }
+        #catcher .section-title { color: #ef6c00; border-color: #ffb74d; }
+        #catcher .work-title { color: #ef6c00; }
+        #catcher-btn.active { background: #f57c00; color: white; border-color: #f57c00; }
+        
+
+        /* Мы - холодные синие тона */
+        #we .section { border-left-color: #2196f3; }
+        #we .quote { border-left-color: #2196f3; background: #e3f2fd; }
+        #we .theme { background: #bbdefb; color: #0d47a1; border: 1px solid #64b5f6; }
+        #we .decorative-element { background: linear-gradient(to right, #bbdefb, #64b5f6, #2196f3); }
+        #we .section-title { color: #1565c0; border-color: #64b5f6; }
+        #we .work-title { color: #1565c0; }
+        #we-btn.active { background: #1976d2; color: white; border-color: #1976d2; }
+        
+        /* А зори здесь тихие - приглушенные зеленые тона */
+        #dawn .section { border-left-color: #4caf50; }
+        #dawn .quote { border-left-color: #4caf50; background: #e8f5e9; }
+        #dawn .theme { background: #c8e6c9; color: #1b5e20; border: 1px solid #81c784; }
+        #dawn .decorative-element { background: linear-gradient(to right, #c8e6c9, #81c784, #4caf50); }
+        #dawn .section-title { color: #2e7d32; border-color: #81c784; }
+        #dawn .work-title { color: #2e7d32; }
+        #dawn-btn.active { background: #388e3c; color: white; border-color: #388e3c; }
+        
+        /* Обыкновенное чудо - волшебные фиолетовые тона */
+        #miracle .section { border-left-color: #673ab7; }
+        #miracle .quote { border-left-color: #673ab7; background: #ede7f6; }
+        #miracle .theme { background: #d1c4e9; color: #311b92; border: 1px solid #9575cd; }
+        #miracle .decorative-element { background: linear-gradient(to right, #d1c4e9, #9575cd, #673ab7); }
+        #miracle .section-title { color: #512da8; border-color: #9575cd; }
+        #miracle .work-title { color: #512da8; }
+        #miracle-btn.active { background: #5e35b1; color: white; border-color: #5e35b1; }
+        
+        /* Колыбель для кошки - ледяные бирюзовые тона */
+        #cradle .section { border-left-color: #00bcd4; }
+        #cradle .quote { border-left-color: #00bcd4; background: #e0f7fa; }
+        #cradle .theme { background: #b2ebf2; color: #006064; border: 1px solid #4dd0e1; }
+        #cradle .decorative-element { background: linear-gradient(to right, #b2ebf2, #4dd0e1, #00bcd4); }
+        #cradle .section-title { color: #00838f; border-color: #4dd0e1; }
+        #cradle .work-title { color: #00838f; }
+        #cradle-btn.active { background: #0097a7; color: white; border-color: #0097a7; }
+        
+        /* Общие стили для body при смене произведений */
+        body.master { background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%); }
+        body.catcher { background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%); }
+        body.we { background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); }
+        body.dawn { background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%); }
+        body.miracle { background: linear-gradient(135deg, #ede7f6 0%, #d1c4e9 100%); }
+        body.cradle { background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%); }
+        
+        @media (max-width: 768px) {
+            .header {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .section {
+                padding: 20px;
+            }
+            
+            .work-title {
+                font-size: 1.8rem;
+            }
+            
+            .work-author {
+                font-size: 1.2rem;
+            }
+            
+            .nav-btn {
+                padding: 10px 15px;
+                font-size: 0.9rem;
+            }
+            
+            .nav-container {
+                gap: 8px;
+            }
+        }
+    </style>
+</head>
+<body class="master">
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-book-open"></i> Коллекция литературных произведений</h1>
+            <div class="nav-container">
+                <button id="master-btn" class="nav-btn active" data-target="master" data-theme="master">
+                    <i class="fas fa-feather-alt"></i> Мастер и Маргарита
+                </button>
+                <button id="catcher-btn" class="nav-btn" data-target="catcher" data-theme="catcher">
+                    <i class="fas fa-hat-cowboy"></i> Над пропастью во ржи
+                </button>
+                <button id="we-btn" class="nav-btn" data-target="we" data-theme="we">
+                    <i class="fas fa-users"></i> Мы
+                </button>
+                <button id="dawn-btn" class="nav-btn" data-target="dawn" data-theme="dawn">
+                    <i class="fas fa-peace"></i> А зори здесь тихие
+                </button>
+                <button id="miracle-btn" class="nav-btn" data-target="miracle" data-theme="miracle">
+                    <i class="fas fa-magic"></i> Обыкновенное чудо
+                </button>
+                <button id="cradle-btn" class="nav-btn" data-target="cradle" data-theme="cradle">
+                    <i class="fas fa-cat"></i> Колыбель для кошки
+                </button>
+            </div>
+        </header>
+        
+        <div class="content">
+            <!-- Мастер и Маргарита -->
+            <div id="master" class="literary-work active">
+                <div class="work-header">
+                    <h2 class="work-title">Мастер и Маргарита</h2>
+                    <p class="work-author">Михаил Булгаков</p>
+                </div>
+                
+                <div class="section">
+                    <div class="section-title"><i class="fas fa-pen-fancy"></i> Автор, Название и Тема</div>
+                    <p><strong>Михаил Афанасьевич Булгаков</strong> (1891-1940) — русский писатель, драматург и театральный режиссёр. Его творчество сочетает в себе сатиру, мистику и глубокие философские размышления.</p>
+                    
+                    <p>Роман <strong>"Мастер и Маргарита"</strong>, работа над которым велась с 1928 года вплоть до смерти писателя, является уникальным сплавом сатиры, фантастики, философии и глубоких размышлений о природе добра и зла.</p>
+                    
+                    <p>Произведение затрагивает множество важных тем:</p>
+                    
+                    <div class="themes">
+                        <span class="theme">Любовь</span>
+                        <span class="theme">Сатира</span>
+                        <span class="theme">Философия</span>
+                        <span class="theme">Фантастика</span>
+                        <span class="theme">История</span>
+                        <span class="theme">Мистика</span>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <div class="section-title"><i class="fas fa-lightbulb"></i> Основная мысль / идея</div>
+                    <p>Роман поднимает важнейшие проблемы и пороки общества, а также тему вечной любви. Булгаков мастерски показывает человеческие слабости и силу настоящего чувства, способного преодолеть любые препятствия.</p>
+                    
+                    <div class="quote">
+                        "Любая история забывается, но она будет продолжать жить в головах отдельных людей."
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <div class="section-title"><i class="fas fa-brain"></i> Размышления о прочитанной книге</div>
+                    <p>Роман Булгакова имеет несколько сюжетных линий, которые в самом конце сливаются в единое целое, когда Мастер "освобождает" Понтия Пилата от вечного сна. Произведение поднимает не только идею зла в обществе, показанную через Воланда и его свиту, но и темы любви и милосердия.</p>
+                    <p>Мне особенно запомнился эпизод в Варьете, где Воланд выставляет на показ людские пороки, и именно благодаря этой сатире этот эпизод отложился у меня в памяти.</p>
+                </div>
+                
+                <div class="section">
+                    <div class="section-title"><i class="fas fa-star"></i> Мои впечатления</div>
+                    <p>Реальность оправдала ожидания, я ожидал некого сходства с романом "Собачье сердце", но в реальности оно есть только в стилистической манере и философском характере обоих произведений.</p>
+                    <div class="comparison">
+                        <h3>Сравнение с "Собачьим сердцем"</h3>
+                        <p>Оба произведения Булгакова содержат сатирические элементы и философские размышления, но "Мастер и Маргарита" представляет собой более масштабное и многоплановое произведение с глубокими метафизическими темами.</p>
+                    </div>
+                </div>
+                <div class="section">
+                    <div class="section-title">Обложка романа</div>
+                        <img src="photo/master_p.jpg" alt="Обложка книги" class="book-cover">
+                </div>
+                
+                <div class="decorative-element"></div>
+            </div>
+            
+            <!-- Над пропастью во ржи -->
+            <div id="catcher" class="literary-work">
+                <div class="work-header">
+                    <h2 class="work-title">Над пропастью во ржи</h2>
+                    <p class="work-author">Джером Сэлинджер</p>
+                </div>
+                
+                <div class="section">
+                    <div class="section-title"><i class="fas fa-pen-fancy"></i> Автор, Название и Тема</div>
+                    <p><strong>Джером Дэвид Сэлинджер</strong> (1919-2010) — американский писатель, наиболее известный своим романом "Над пропастью во ржи". Его творчество оказало значительное влияние на мировую литературу XX века.</p>
+                    
+                    <p>Роман <strong>"Над пропастью во ржи"</strong>, опубликованный в 1951 году, стал голосом поколения и классикой мировой литературы. Название отсылает к мечте главного героя спасать детей от падения в пропасть взросления.</p>
+                    
+                    <p>Произведение затрагивает множество важных тем:</p>
+                    
+                    <div class="themes">
+                        <span class="theme">Подростковый бунт</span>
+                        <span class="theme">Отчуждение</span>
+                        <span class="theme">Потеря невинности</span>
+                        <span class="theme">Лицемерие общества</span>
+                        <span class="theme">Одиночество</span>
+                        <span class="theme">Поиск идентичности</span>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <div class="section-title"><i class="fas fa-lightbulb"></i> Основная мысль / идея</div>
+                    <p>Основная идея романа — критика лицемерия и фальши взрослого мира. Сэлинджер показывает трагедию подростка, который не готов принять правила общества, кажущиеся ему неискренними.</p>
+                    
+                    <div class="quote">
+                        "Я себе представил, как маленькие ребятишки играют вечером в огромном поле, во ржи. Тысячи малышей, и кругом — ни души, ни одного взрослого, кроме меня. А я стою на самом краю скалы, над пропастью, понимаешь? И мое дело — ловить ребятишек, чтобы они не сорвались в пропасть. Понимаешь, они играют и не видят, куда бегут, а тут я подбегаю и ловлю их, чтобы они не сорвались. Вот и вся моя работа. Стеречь ребят над пропастью во ржи. Знаю, это глупости, но это единственное, чего мне хочется по-настоящему. Наверно, я дурак."
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <div class="section-title"><i class="fas fa-brain"></i> Размышления о прочитанной книге</div>
+                    <p>"Над пропастью во ржи" — это глубоко пронзительное произведение. Холден Колфилд стал символом подросткового бунта и поиска своего места в мире.</p>
+                    <p>Особенно впечатляет, как Сэлинджеру удалось передать голос подростка с его максимализмом, ранимостью и искренним стремлением к правде.</p>
+                </div>
+                
+                <div class="section">
+                    <div class="section-title"><i class="fas fa-star"></i> Мои впечатления</div>
+                    <pРеальность превзошла ожидания — роман оказался тонким психологическим исследованием одиночества, отчуждения и поиска смысла в современном мире.</p>
+                    <p>В отличие от многих произведений о подростках, "Над пропастью во ржи" не предлагает простых решений и не осуждает своего героя. Сэлинджер создаёт многогранный образ, который вызывает одновременно и сочувствие, и понимание, и лёгкое раздражение — точно так же, как настоящие люди в нашей жизни.</p>
+                </div>
+                <div class="section">
+                    <div class="section-title"><i class="fas fa-book"></i> Культурное влияние</div>
+                    <p>Роман оказал огромное влияние на мировую культуру, став символом чистоты и бунтарства молодого поколения. Интересно, что эта книга стала одной из самых запрещаемых в США из-за своего откровенного содержания и критики общественных устоев, но одновременно и одной из самых изучаемых в школах.</p>
+                    <p>Многие читатели видят в Холдене Колфилде себя в подростковом возрасте — запутанных, одиноких, но desperately ищущих правду и искренность в мире, который кажется фальшивым и лицемерным.</p>
+                </div>
+                <div class="section">
+                    <div class="section-title">Обложка романа</div>
+                    <img src="photo/catcher.jpg" alt="Обложка книги" class="book-cover">
+                </div>
+                <div class="decorative-element"></div>
+            </div>
+            
+            <!-- Мы -->
+            <div id="we" class="literary-work">
+                <div class="work-header">
+                    <h2 class="work-title">Мы</h2>
+                    <p class="work-author">Евгений Замятин</p>
+                </div>
+                
+                <div class="section">
+                    <div class="section-title"><i class="fas fa-pen-fancy"></i> Автор, Название и Тема</div>
+                    <p><strong>Евгений Иванович Замятин</strong> (1884-1937) — русский писатель, критик и публицист, автор одного из первых антиутопических романов в мировой литературе.</p>
+                    
+                    <p>Роман <strong>"Мы"</strong>, написанный в 1920 году, стал одним из первых произведений в жанре антиутопии и оказал значительное влияние на Джорджа Оруэлла и Олдоса Хаксли. Название отражает главную идею тоталитарного государства, где индивидуальность подавлена в пользу коллективного "мы".</p>
+                    
+                    <p>Произведение затрагивает множество важных тем:</p>
+                    
+                    <div class="themes">
+                        <span class="theme">Тоталитаризм</span>
+                        <span class="theme">Свобода vs Безопасность</span>
+                        <span class="theme">Дегуманизация</span>
+                        <span class="theme">Индивидуальность</span>
+                        <span class="theme">Технократия</span>
+                        <span class="theme">Сопротивление системе</span>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <div class="section-title"><i class="fas fa-lightbulb"></i> Основная мысль / идея</div>
+                    <p>Роман исследует противоречие между индивидуальной свободой и коллективной безопасностью, показывая, как стремление к идеальному порядку приводит к тотальной дегуманизации. Замятин мастерски демонстрирует, как технологический прогресс без духовного развития создает общество, в котором люди добровольно отказываются от своей человечности ради иллюзорного счастья.</p>
+            
+                    <div class="quote">
+                        "Да, да именно! Надо всем сойти с ума — как можно скорее! Это необходимо — я знаю!"
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <div class="section-title"><i class="fas fa-brain"></i> Размышления о прочитанной книге</div>
+                    <p>"Мы" — это глубокая и пророческая антиутопия, которая остается актуальной в эпоху цифровых технологий и тотальной слежки. Замятин предвидел опасность потери приватности задолго до её реального появления.</p>
+                     </div>
+                
+                <div class="section">
+                    <div class="section-title"><i class="fas fa-star"></i> Мои впечатления</div>
+                    <p>Роман оказался не только политическим предупреждением, но и глубоким исследованием человеческой природы.</p>
+                    <p>Особенно впечатляет, как автор через математические метафоры показывает противоречие между свободой и безопасностью, между индивидуальностью и коллективом.</p>
+                </div>
+                 <div class="section">
+                    <div class="section-title">Обложка романа</div>
+                    <img src="photo/we.jpg" alt="Обложка книги" class="book-cover">
+                </div>
+                <div class="decorative-element"></div>
+            </div>
+            
+            <!-- А зори здесь тихие -->
+            <div id="dawn" class="literary-work">
+                <div class="work-header">
+                    <h2 class="work-title">А зори здесь тихие</h2>
+                    <p class="work-author">Борис Васильев</p>
+                </div>
+                
+                <div class="section">
+                    <div class="section-title"><i class="fas fa-pen-fancy"></i> Автор, Название и Тема</div>
+                    <p><strong>Борис Львович Васильев</strong> (1924-2013) — советский и российский писатель, сценарист и драматург. Участник Великой Отечественной войны, его произведения посвящены военной теме и проблемам нравственности.</p>
+                    
+                    <p>Повесть <strong>"А зори здесь тихие"</strong>, опубликованная в 1969 году, стала одним из самых известных произведений о Великой Отечественной войне. </p>
+                    
+                    <p>Произведение затрагивает множество важных тем:</p>
+                    
+                    <div class="themes">
+                        <span class="theme">Женственность на войне</span>
+                        <span class="theme">Героизм и самопожертвование</span>
+                        <span class="theme">Цена победы</span>
+                        <span class="theme">Судьбы поколения</span>
+                        <span class="theme">Нравственный выбор</span>
+                        <span class="theme">Память о войне</span>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <div class="section-title"><i class="fas fa-lightbulb"></i> Основная мысль / идея</div>
+                    <p>Основная идея повести — показать противоестественность войны, особенно когда её жертвами становятся женщины. Васильев подчёркивает, что истинный героизм заключается в ежедневном выполнении своего долга.</p>
+                    
+                    <div class="quote">
+                        "Война – это ведь не просто кто кого перестреляет. Война – это кто кого передумает."
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <div class="section-title"><i class="fas fa-brain"></i> Размышления о прочитанной книге</div>
+                    <p>"А зори здесь тихие" — это глубоко пронзительное произведение, которое заставляет переосмыслить представление о войне. Васильев мастерски показывает, что истинная трагедия войны не в масштабных сражениях, а в судьбах отдельных людей.</p>
+                    </div>
+                
+                <div class="section">
+                    <div class="section-title"><i class="fas fa-star"></i> Мои впечатления</div>
+                    <p>Ожидал типичную военную повесть о подвигах и сражениях, но получил нечто гораздо более глубокое и эмоциональное. Реальность превзошла ожидания — вместо батальных сцен Васильев создал психологически точное произведение о человеческих судьбах.</p>
+                    <p>Впечатляет как автор детально прописывает характеры каждой из героинь, показывая их уникальность, мечты и надежды, которые безжалостно уничтожаются войной:</p>
+                    <ul class="character-list">
+                        <li><strong>Рита Осянина</strong> — серьёзная и ответственная, уже познавшая горечь утраты</li>
+                        <li><strong>Женя Комелькова</strong> — яркая и жизнерадостная, готовая на самопожертвование</li>
+                        <li><strong>Лиза Бричкина</strong> — мечтательная и романтичная, верящая в лучшее</li>
+                        <li><strong>Соня Гурвич</strong> — умная и образованная, носительница культуры</li>
+                        <li><strong>Галя Четвертак</strong> — юная и наивная, не успевшая повзрослеть</li>
+                    </ul>
+                    <p>Также не ожидал, что повесть окажется настолько лиричной — описания природы, тихих зорь создают пронзительный контраст с ужасом происходящего, подчёркивая противоестественность войны.</p>
+                </div>
+                 <div class="section">
+                    <div class="section-title">Обложка романа</div>
+                    <img src="photo/dawn.jpg" alt="Обложка книги" class="book-cover">
+                </div>
+                <div class="decorative-element"></div>
+            </div>
+            
+            <!-- Обыкновенное чудо -->
+            <div id="miracle" class="literary-work">
+                <div class="work-header">
+                    <h2 class="work-title">Обыкновенное чудо</h2>
+                    <p class="work-author">Евгений Шварц</p>
+                </div>
+                
+                <div class="section">
+                    <div class="section-title"><i class="fas fa-pen-fancy"></i> Автор, Название и Тема</div>
+                    <p><strong>Евгений Львович Шварц</strong> (1896-1958) — советский писатель, драматург и сценарист, создатель знаменитых пьес-сказок для взрослых. Его творчество сочетает в себе фантазию, психологичность и философское осмысление.</p>
+                    
+                    <p>Пьеса <strong>"Обыкновенное чудо"</strong>, написанная в 1954 году, представляет собой философскую сказку о любви, превращениях и внутренней свободе. Название отражает идею о том, что самые удивительные чудеса скрываются в простых человеческих чувствах.</p>
+                    
+                    <p>Произведение охватывает множество важных направлений:</p>
+                    
+                    <div class="themes">
+                        <span class="theme">Любовь и самопожертвование</span>
+                        <span class="theme">Внутренняя свобода</span>
+                        <span class="theme">Волшебство в повседневности</span>
+                        <span class="theme">Нравственный выбор</span>
+                        <span class="theme">Сила искренности</span>
+                        <span class="theme">Преодоление страхов</span>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <div class="section-title"><i class="fas fa-lightbulb"></i> Основная мысль / идея</div>
+                    <p>Основная идея пьесы заключается в том, что настоящие чудеса рождаются из обычных человеческих чувств — любви, верности, дружбы и самопожертвования. Шварц показывает, что волшебство происходит не благодаря магии, а благодаря способности человека меняться.</p>
+                    
+                    
+                </div>
+                
+                <div class="section">
+                    <div class="section-title"><i class="fas fa-brain"></i> Размышления о прочитанной книге</div>
+                    <p>"Обыкновенное чудо" — это глубокая и многогранная пьеса, которая заставляет задуматься о природе человеческих отношений, силе любви и ценности внутренней свобода. Шварц создает удивительный мир, где волшебство становится метафорой внутренних процессов человеческой души.</p>
+                    </div>
+                
+                <div class="section">
+                    <div class="section-title"><i class="fas fa-star"></i> Мои впечатления</div>
+                    <p>На первый взгляд, легкая сказочная пьеса с незамысловатым сюжетом оказалась глубоким философским произведением, вместо простой истории о волшебстве Шварц предложил многогранное размышление о человеческой природе.</p>
+                    <p>Потрясают сказочные образы, раскрывающие сложные психологические и философские проблемы, показывая, что каждый из нас способен на "обыкновенные чудеса".</p>
+                </div>
+                
+                <div class="section">
+                <div class="section-title">Художественные особенности и стиль</div>
+                <p>Шварц создает уникальный сплав сказочной фантастики и глубокого психологизма. Его диалоги полны искрометного юмора и тонкой иронии, но при этом несут глубокий философский смысл. Автор мастерски использует традиционные сказочные образы для раскрытия сложных тем взросления, ответственности и нравственного выбора.</p>
+                
+                <div class="quote">
+                        "В молодости я ненавидел людей, но это так скучно! Ведь тогда ничего не хочется делать и тебя одолевают бесплодные, печальные мысли. И вот я стал служить людям и понемножку привязался к ним."
+                    </div>
+                
+                <p>Особенность стиля Шварца заключается в том, что он не поучает, а предлагает зрителю самостоятельно сделать выводы, сохраняя легкую, ироничную интонацию даже при обсуждении самых серьезных тем.</p>
+                
+                </div>
+                 <div class="section">
+                    <div class="section-title">Обложка романа</div>
+                    <img src="photo/miracle.jpg" alt="Обложка книги" class="book-cover">
+                    <img src="photo/miracle1.jpg" alt="Обложка книги" class="book-cover">
+                    <img src="photo/miracle2.jpg" alt="Обложка книги" class="book-cover">
+                    <img src="photo/miracle3.jpeg" alt="Обложка книги" class="book-cover">
+                </div>
+                <div class="decorative-element"></div>
+            </div>
+            
+            <!-- Колыбель для кошки -->
+            <div id="cradle" class="literary-work">
+                <div class="work-header">
+                    <h2 class="work-title">Колыбель для кошки</h2>
+                    <p class="work-author">Курт Воннегут</p>
+                </div>
+                
+                <div class="section">
+                    <div class="section-title"><i class="fas fa-pen-fancy"></i> Автор, Название и Тема</div>
+                    <p><strong>Курт Воннегут-младший</strong> (1922-2007) — американский писатель, сатирик и художник. Один из наиболее значительных американских писателей XX века. Его творчество сочетает в себе элементы сатиры, чёрного юмора и научной фантастики.</p>
+                    
+                    <p>Роман <strong>"Колыбель для кошки"</strong>, опубликованный в 1963 году, получил своё название от детской игры с верёвочкой, которая становится символом иллюзорности человеческих представлений о реальности и хрупкости нашего существования.</p>
+                    
+                    <p>Произведение затрагивает множество важных тем:</p>
+                    
+                    <div class="themes">
+                        <span class="theme">Ответственность науки</span>
+                        <span class="theme">Религия и её роль в обществе</span>
+                        <span class="theme">Апокалипсис и конец света</span>
+                        <span class="theme">Ложь и самообман</span>
+                        <span class="theme">Абсурдность человеческого существования</span>
+                        <span class="theme">Этические дилеммы прогресса</span>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <div class="section-title"><i class="fas fa-lightbulb"></i> Основная мысль / идея</div>
+                    <p>Основная идея романа — предупреждение об опасности безответственного использования научных открытий и слепой веры в прогресса. Воннегут показывает, как наука, оторванная от морали, может привести к катастрофе.</p>
+                    
+                    <div class="quote">
+                        " Доктор Хониккер любил говорить, что, если ученый не умеет популярно объяснить восьмилетнему ребенку, чем он занимается, значит, он шарлатан."
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <div class="section-title"><i class="fas fa-brain"></i> Размышления о прочитанной книге</div>
+                    <p>"Колыбель для кошки" заставляет глубоко задуматься о природе человеческой ответственности. История создания "лёд-девять" — вещества, способного заморозить всю воду на Земле, — становится метафорой непредсказуемых последствий научных открытий.</p>
+                    <p>Воннегут через вымышленную религию Боконизма показывает, что люди готовы верить во что угодно, лишь бы найти утешение и смысл в хаотичном замороженном мире.</p>
+                </div>
+                
+                <div class="section">
+                    <div class="section-title"><i class="fas fa-star"></i> Мои впечатления</div>
+                    <p>Реальность превзошла ожидания — вместо простого повествования о научной катастрофе, Воннегут создал сложную сатиру на современное общество, науку и религию.</p>
+                    <p>Роман заставляет задуматься о том, где проходит грань между спасительной иллюзией и разрушительным самообманом, и как эта грань тонка в современном мире.</p>
+                    <p>Особенно удивил чёрный юмор Воннегута — способность говорить о самых мрачных вещах с иронией и сарказмом. Ожидал мрачного и серьёзного тона, но вместо этого столкнулся с едкой сатирой, которая заставляет смеяться сквозь ужас происходящего.</p>
+                    <p>Также не ожидал, что вымышленная религия Боконизм окажется настолько продуманной и философски насыщенной, с своими заповедями, ритуалами и сложной системой взглядов на мир.</p>
+                
+                </div>
+                <div class="section">
+                <div class="section-title"><i class="fas fa-pen"></i>Актуальность произведения</div>
+                <p>Спустя более полувека после публикации, "Колыбель для кошки" остается поразительно актуальной. В эпоху развития искусственного интеллекта, генной инженерии и климатических изменений вопросы ответственности науки перед человечеством становятся как никогда важными.</p>
+                           </div>
+                 <div class="section">
+                    <div class="section-title">Обложка романа</div>
+                    <img src="photo/cat.jpg" alt="Обложка книги" class="book-cover">
+                </div>
+                <div class="decorative-element"></div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© Читательский дневник Мардинский Артём | Анализы и личные впечатления</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const navButtons = document.querySelectorAll('.nav-btn');
+            const literaryWorks = document.querySelectorAll('.literary-work');
+            const body = document.body;
+            
+            navButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const target = this.getAttribute('data-target');
+                    const theme = this.getAttribute('data-theme');
+                    
+                    // Убираем активный класс у всех кнопок и произведений
+                    navButtons.forEach(btn => btn.classList.remove('active'));
+                    literaryWorks.forEach(work => work.classList.remove('active'));
+                    
+                    // Добавляем активный класс к текущей кнопке и произведению
+                    this.classList.add('active');
+                    document.getElementById(target).classList.add('active');
+                    
+                    // Меняем тему body
+                    body.className = theme;
+                });
+            });
+        });
+    </script>
+</body>
+</html>
