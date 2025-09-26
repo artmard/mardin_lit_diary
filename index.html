@@ -11,7 +11,6 @@
             padding: 0;
             box-sizing: border-box;
             font-family: 'Georgia', serif;
-            {% comment %} font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; {% endcomment %}
             transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease, transform 0.3s ease;
         }
         
@@ -233,8 +232,9 @@
         
         .character-list li {
             padding: 8px 0;
-            border-bottom: 1px dashed #4caf50;
+            border-bottom: 1px dashed #dee2e6;
         }
+
         /* Цветовые схемы для произведений */
         
         /* Мастер и Маргарита - мистические пурпурные тона */
@@ -246,7 +246,6 @@
         #master .work-title { color: #7b1fa2; }
         #master-btn.active { background: #7b1fa2; color: white; border-color: #7b1fa2; }
         
-        
         /* Над пропастью во ржи - теплые оранжевые тона */
         #catcher .section { border-left-color: #ff9800; }
         #catcher .quote { border-left-color: #ff9800; background: #fff3e0; }
@@ -255,7 +254,6 @@
         #catcher .section-title { color: #ef6c00; border-color: #ffb74d; }
         #catcher .work-title { color: #ef6c00; }
         #catcher-btn.active { background: #f57c00; color: white; border-color: #f57c00; }
-        
 
         /* Мы - холодные синие тона */
         #we .section { border-left-color: #2196f3; }
@@ -293,6 +291,15 @@
         #cradle .work-title { color: #00838f; }
         #cradle-btn.active { background: #0097a7; color: white; border-color: #0097a7; }
         
+        /* Пикник на обочине - загадочные серо-зеленые тона */
+        #picnic .section { border-left-color: #607d8b; }
+        #picnic .quote { border-left-color: #607d8b; background: #eceff1; }
+        #picnic .theme { background: #cfd8dc; color: #37474f; border: 1px solid #90a4ae; }
+        #picnic .decorative-element { background: linear-gradient(to right, #cfd8dc, #90a4ae, #607d8b); }
+        #picnic .section-title { color: #455a64; border-color: #90a4ae; }
+        #picnic .work-title { color: #455a64; }
+        #picnic-btn.active { background: #546e7a; color: white; border-color: #546e7a; }
+        
         /* Общие стили для body при смене произведений */
         body.master { background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%); }
         body.catcher { background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%); }
@@ -300,9 +307,10 @@
         body.dawn { background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%); }
         body.miracle { background: linear-gradient(135deg, #ede7f6 0%, #d1c4e9 100%); }
         body.cradle { background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%); }
+        body.picnic { background: linear-gradient(135deg, #eceff1 0%, #cfd8dc 100%); }
         
         @media (max-width: 768px) {
-            .header {
+            header {
                 padding: 20px;
             }
             
@@ -359,6 +367,9 @@
                 </button>
                 <button id="cradle-btn" class="nav-btn" data-target="cradle" data-theme="cradle">
                     <i class="fas fa-cat"></i> Колыбель для кошки
+                </button>
+                <button id="picnic-btn" class="nav-btn" data-target="picnic" data-theme="picnic">
+                    <i class="fas fa-road"></i> Пикник на обочине
                 </button>
             </div>
         </header>
@@ -707,6 +718,77 @@
                     <div class="section-title">Обложка романа</div>
                     <img src="photo/cat.jpg" alt="Обложка книги" class="book-cover">
                 </div>
+                <div class="decorative-element"></div>
+            </div>
+            
+            <!-- Пикник на обочине -->
+            <div id="picnic" class="literary-work">
+                <div class="work-header">
+                    <h2 class="work-title">Пикник на обочине</h2>
+                    <p class="work-author">Аркадий и Борис Стругацкие</p>
+                </div>
+                
+                <div class="section">
+                    <div class="section-title"><i class="fas fa-pen-fancy"></i> Автор, Название и Тема</div>
+                    <p><strong>Братья Стругацкие</strong> — Аркадий Натанович (1925-1991) и Борис Натанович (1933-2012) — классики советской научной фантастики, чьи произведения стали важной частью мировой литературы.</p>
+                    
+                    <p>Повесть <strong>"Пикник на обочине"</strong>, написанная в 1971 году, представляет собой философскую научную фантастику, исследующую тему контакта с непостижимым. Название метафорически описывает посещение Земли инопланетянами, которые даже не заметили человечества, подобно тому, как люди не замечают насекомых после пикника.</p>
+                    
+                    <p>Произведение затрагивает множество важных тем:</p>
+                    
+                    <div class="themes">
+                        <span class="theme">Контакт с непостижимым</span>
+                        <span class="theme">Человеческое любопытство</span>
+                        <span class="theme">Выживание в аномальных условиях</span>
+                        <span class="theme">Наука и мораль</span>
+                        <span class="theme">Свобода воли и предназначение</span>
+                        <span class="theme">Цена знаний</span>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <div class="section-title"><i class="fas fa-lightbulb"></i> Основная мысль / идея</div>
+                    <p>Основная идея повести — исследование границ человеческого понимания и того, как люди справляются с явлениями, превосходящими их разумение. Стругацкие показывают, что даже самые опасные знания манят людей, готовых ради них рисковать жизнью.</p>
+                    
+                    <div class="quote">
+                        "Счастье для всех, даром, и пусть никто не уйдёт обиженный!"
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <div class="section-title"><i class="fas fa-brain"></i> Размышления о прочитанной книге</div>
+                    <p>"Пикник на обочине" — это глубокая философская притча о природе человеческого любопытства и готовности идти на риск ради неизведанного. Образ Зоны становится метафорой всего непознанного, что манит человека, несмотря на смертельную опасность.</p>
+                    <p>Особенно впечатляет, как авторы через образ сталкера Рэда Шухарта показывают сложность морального выбора между личным благополучием и служением другим.</p>
+                </div>
+                
+                <div class="section">
+                    <div class="section-title"><i class="fas fa-star"></i> Мои впечатления</div>
+                    <p>Повесть превзошла все ожидания. Вместо традиционной научной фантастики о контакте с инопланетянами, Стругацкие создали глубокое философское произведение, которое заставляет задуматься о природе человеческого стремления к неизведанному.</p>
+                    <p>Образ Зоны как места, где действуют непонятные человеку законы, но которое одновременно манит и пугает, оказался удивительно многогранным. Не ожидал, что фантастический сюжет может быть настолько психологически достоверным и философски насыщенным.</p>
+                    <p>Особенно поразила концовка с золотым шаром, исполняющим желания, — этот образ стал одним из самых сильных в мировой фантастике, символизируя вечную надежду человека на чудо.</p>
+                </div>
+                
+                <div class="section">
+                    <div class="section-title"><i class="fas fa-users"></i> Главные герои</div>
+                    <ul class="character-list">
+                        <li><strong>Рэдрик Шухарт</strong> — сталкер, человек сложной судьбы, который рискует жизнью в Зоне, но сохраняет человечность</li>
+                        <li><strong>Кирилл Панов</strong> — ученый-идеалист, верящий в разумное начало Зоны</li>
+                        <li><strong>Редрик-младший</strong> — "золотой шарик", ребенок-мутант, символизирующий будущее человечества</li>
+                        <li><strong>Гуталин</strong> — напарник Шухарта, олицетворяющий прагматичный подход к Зоне</li>
+                    </ul>
+                </div>
+                
+                <div class="section">
+                    <div class="section-title"><i class="fas fa-film"></i> Культурное влияние</div>
+                    <p>"Пикник на обочине" оказал огромное влияние на мировую культуру. По мотивам повести Андрей Тарковский снял фильм "Сталкер" (1979), который стал классикой мирового кинематографа. Также произведение породило целый жанр "сталкерской" литературы и игр, наиболее известной из которых является серия S.T.A.L.K.E.R.</p>
+                    <p>Концепция "Зоны" — территории с аномальными явлениями и артефактами — стала одной из самых узнаваемых и влиятельных в научной фантастике XX века.</p>
+                </div>
+                
+                <div class="section">
+                    <div class="section-title">Обложка повести</div>
+                    <img src="photo/picnic.jpg" alt="Обложка книги Пикник на обочине" class="book-cover">
+                </div>
+                
                 <div class="decorative-element"></div>
             </div>
         </div>
